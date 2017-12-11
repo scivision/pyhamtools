@@ -9,16 +9,16 @@ import urllib
 import json
 import copy
 import sys
-import unicodedata
+#import unicodedata
 
 import requests
-from requests.exceptions import ConnectionError, HTTPError, Timeout
+#from requests.exceptions import ConnectionError, HTTPError, Timeout
 from bs4 import BeautifulSoup
 import pytz
 
-import version
-from consts import LookupConventions as const
-from exceptions import APIKeyMissingError
+from . import version
+from .consts import LookupConventions as const
+from .exceptions import APIKeyMissingError
 
 UTC = pytz.UTC
 timestamp_now = datetime.utcnow().replace(tzinfo=UTC)

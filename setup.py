@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-import sys
-import os
-from distutils.core import setup
-# from pyhamtools import __version__, __release__
+import sys,os
+from setuptools import setup,find_packages
 
 kw = {}
 
@@ -11,7 +9,6 @@ if sys.version_info >= (3,):
 
 exec(open(os.path.join("pyhamtools","version.py")).read())
 
-# from pyhamtools import __version__, __release__
 
 setup(name='pyhamtools',
       version=__release__,
@@ -20,9 +17,9 @@ setup(name='pyhamtools',
       author_email='Tobias@dh1tw.de',
       url='http://github.com/dh1tw/pyhamtools',
       package_data={'': ['countryfilemapping.json']},
-      packages=['pyhamtools'],
+      packages=find_packages(),
       install_requires=[
-          "pytz", 
+          "pytz",
           "requests",
           "pyephem",
           "beautifulsoup4",
