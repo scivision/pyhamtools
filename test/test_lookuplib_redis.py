@@ -1,12 +1,9 @@
 import pytest
-import json
 from datetime import datetime
-
 import pytz
 import redis
 
 from pyhamtools import LookupLib, Callinfo
-
 
 UTC = pytz.UTC
 

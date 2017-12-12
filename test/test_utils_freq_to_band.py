@@ -1,8 +1,9 @@
+import unittest
 import pytest
 from pyhamtools.frequency import freq_to_band
 from pyhamtools.consts import LookupConventions as const
 
-class Test_utils_freq_to_band():
+class Test_utils_freq_to_band(unittest.TestCase):
 
     def test_hf_frequencies(self):
         assert freq_to_band(137) == {"band" : 2190, "mode":const.CW}
@@ -79,3 +80,7 @@ class Test_utils_freq_to_band():
 
         with pytest.raises(KeyError):
             freq_to_band(16304)
+
+
+if __name__ == '__main__':
+    unittest.main()

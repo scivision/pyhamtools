@@ -268,7 +268,7 @@ class TestclublogXML_Getters:
             fixClublogXML.is_invalid_operation("5W1CFN", timestamp_before)
 
         #Invalid Operation with end date
-        timestamp_before = datetime(year=2004, month=04, day=02).replace(tzinfo=UTC)
+        timestamp_before = datetime(year=2004, month=4, day=2).replace(tzinfo=UTC)
         with pytest.raises(KeyError):
             fixClublogXML.is_invalid_operation("T33C")
 

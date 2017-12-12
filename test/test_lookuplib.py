@@ -1,7 +1,7 @@
 import pytest
 
 from pyhamtools.lookuplib import LookupLib
-from pyhamtools.exceptions import APIKeyMissingError
+#from pyhamtools.exceptions import APIKeyMissingError
 
 
 @pytest.fixture(scope="function", params=[5, -5,  "", "foo bar", 11.5, {}, [], None, ("foo", "bar")])
@@ -20,7 +20,7 @@ class TestlookupLib:
 
 
 class TestlookupLibHelper:
-    
+
     # def test_checkApiKeyValidity(self, fixClublogApi, fixApiKey):
     #
     #     with pytest.raises(AttributeError):
@@ -30,13 +30,12 @@ class TestlookupLibHelper:
     #         fixClublogApi._checkApiKeyValidity(apikey="")
     #
     #     assert fixClublogApi._checkApiKeyValidity(apikey=fixApiKey) is True
-        
-    
+
+
     def test_generateRandomWord(self, fixClublogApi, fixNonUnsignedInteger):
-        
+
         with pytest.raises(TypeError):
             fixClublogApi._generate_random_word()
 
         assert type(fixClublogApi._generate_random_word(5)) is str
         assert len(fixClublogApi._generate_random_word(5)) is 5
-        

@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-import sys,os
+install_requires=["pytz","requests","pyephem","beautifulsoup4",]
+tests_require=['nose','pytest']
+
+import os
 from setuptools import setup,find_packages
-
-kw = {}
-
-if sys.version_info >= (3,):
-    kw['use_2to3'] = True
 
 exec(open(os.path.join("pyhamtools","version.py")).read())
 
@@ -18,12 +16,8 @@ setup(name='pyhamtools',
       url='http://github.com/dh1tw/pyhamtools',
       package_data={'': ['countryfilemapping.json']},
       packages=find_packages(),
-      install_requires=[
-          "pytz",
-          "requests",
-          "pyephem",
-          "beautifulsoup4",
-      ],
-      **kw,
+      install_requires=install_requires,
+      tests_require=tests_require,
+      extras_require={'tests':tests_require},
       python_requires='>=2.7',
      )

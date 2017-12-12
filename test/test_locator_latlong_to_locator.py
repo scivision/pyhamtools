@@ -1,6 +1,6 @@
 import pytest
 from pyhamtools.locator import latlong_to_locator
-from pyhamtools.consts import LookupConventions as const
+#from pyhamtools.consts import LookupConventions as const
 
 class Test_latlong_to_locator():
 
