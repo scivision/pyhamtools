@@ -301,6 +301,7 @@ class Callinfo(object):
             would be missing with Clublog (API or XML) :py:class:`LookupLib`.
 
         """
+        assert isinstance(callsign,str)
         callsign_data = self._lookup_callsign(callsign, timestamp)
 
         try:

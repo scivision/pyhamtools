@@ -75,10 +75,7 @@ class LookupLib(object):
             self._logger = logger
         else:
             self._logger = logging.getLogger(__name__)
-            if sys.version_info[:2] == (2, 6):
-                self._logger.addHandler(NullHandler())
-            else:
-                self._logger.addHandler(logging.NullHandler())
+            self._logger.addHandler(logging.NullHandler())
 
         self._apikey = apikey
         self._apiv = apiv
@@ -986,7 +983,7 @@ class LookupLib(object):
 
 
     def _load_countryfile(self,
-                         url="http://www.country-files.com/cty/cty.plist",
+                         url="https://www.country-files.com/cty/cty.plist",
                          country_mapping_filename="countryfilemapping.json",
                          cty_file=None):
         """ Load and process the ClublogXML file either as a download or from file
@@ -1058,7 +1055,7 @@ class LookupLib(object):
 
         download_file_path = os.path.join(tempfile.gettempdir(), filename)
         with open(download_file_path, "w") as download_file:
-            download_file.write(response.content)
+            download_file.write(response.content.decode('ascii'))
         self._logger.debug(str(download_file_path) + " successfully downloaded")
 
         # unzip file, if gz
@@ -1436,7 +1433,7 @@ class LookupLib(object):
         """
             Generates a random word
         """
-        return ''.join(random.choice(string.lowercase) for i in range(length))
+        return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
 
 
     def _check_html_response(self, response):
