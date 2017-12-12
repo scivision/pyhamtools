@@ -1,3 +1,3 @@
-from pyhamtools.lookuplib import LookupLib
-from pyhamtools.callinfo import Callinfo
+from .lookuplib import LookupLib
+from .callinfo import Callinfo
 

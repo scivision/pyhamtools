@@ -24,5 +24,6 @@ setup(name='pyhamtools',
           "pyephem",
           "beautifulsoup4",
       ],
-      **kw
+      **kw,
+      python_requires='>=2.7',
      )

@@ -3,14 +3,10 @@ __author__ = 'dh1tw'
 from datetime import datetime
 from time import strptime, mktime
 import re
-
 import pytz
-
-from pyhamtools.consts import LookupConventions as const
-
+from .consts import LookupConventions as const
 
 UTC = pytz.UTC
-
 
 
 def decode_char_spot(raw_string):
@@ -35,6 +31,7 @@ def decode_char_spot(raw_string):
 
     return data
 
+
 def decode_pc11_message(raw_string):
     """Decode PC11 message, which usually contains DX Spots"""
 
@@ -47,6 +44,7 @@ def decode_pc11_message(raw_string):
     data[const.SPOTTER] = spot[6]
     data["node"] = spot[7]
     data["raw_spot"] = raw_string
+
     return data
 
 
@@ -63,7 +61,9 @@ def decode_pc61_message(raw_string):
     data["node"] = spot[7]
     data["ip"] = spot[8]
     data["raw_spot"] = raw_string
+
     return data
+
 
 def decode_pc23_message(raw_string):
     """ Decode PC23 Message which usually contains WCY """
@@ -80,5 +80,6 @@ def decode_pc23_message(raw_string):
     data["node"] = wcy[7]
     data["ip"] = wcy[8]
     data["raw_data"] = raw_string
+
     return data
 

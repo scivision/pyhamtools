@@ -2,20 +2,13 @@ import re
 import logging
 from datetime import datetime
 import sys
-
 import pytz
-
-from pyhamtools.consts import LookupConventions as const
-
-from pyhamtools.callsign_exceptions import callsign_exceptions
+#
+from .consts import LookupConventions as const
+from .callsign_exceptions import callsign_exceptions
 
 UTC = pytz.UTC
 timestamp_now = datetime.utcnow().replace(tzinfo=UTC)
-
-if sys.version_info < (2, 7, ):
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
 
 
 class Callinfo(object):
@@ -38,10 +31,7 @@ class Callinfo(object):
             self._logger = logger
         else:
             self._logger = logging.getLogger(__name__)
-            if sys.version_info[:2] == (2, 6):
-                self._logger.addHandler(NullHandler())
-            else:
-                self._logger.addHandler(logging.NullHandler())
+            self._logger.addHandler(logging.NullHandler())
 
         self._lookuplib = lookuplib
         self._callsign_info = None
@@ -77,6 +67,7 @@ class Callinfo(object):
             return homecall
         else:
             raise ValueError
+
 
     def _iterate_prefix(self, callsign, timestamp=timestamp_now):
         """truncate call until it corresponds to a Prefix in the database"""
@@ -457,6 +448,7 @@ class Callinfo(object):
 
         """
         return self.get_all(callsign, timestamp)[const.ADIF]
+
 
     def get_continent(self, callsign, timestamp=timestamp_now):
         """ Returns the continent Identifier of a callsign

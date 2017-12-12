@@ -1,7 +1,6 @@
 from __future__ import division
-from math import pi, sin, cos, atan2, sqrt, radians, log, tan, degrees
+from math import sin, cos, atan2, sqrt, radians, degrees
 from datetime import datetime
-
 import pytz
 import ephem
 
@@ -156,15 +155,15 @@ def calculate_distance(locator1, locator2):
     d_long = radians(long2) - radians(long1)
 
     r_lat1 = radians(lat1)
-    r_long1 = radians(long1)
+#    r_long1 = radians(long1)
     r_lat2 = radians(lat2)
-    r_long2 = radians(long2)
+#    r_long2 = radians(long2)
 
     a = sin(d_lat/2) * sin(d_lat/2) + cos(r_lat1) * cos(r_lat2) * sin(d_long/2) * sin(d_long/2)
     c = 2 * atan2(sqrt(a), sqrt(1-a))
     d = R * c #distance in km
 
-    return d;
+    return d
 
 
 def calculate_distance_longpath(locator1, locator2):
@@ -223,18 +222,19 @@ def calculate_heading(locator1, locator2):
     lat2, long2 = locator_to_latlong(locator2)
 
     r_lat1 = radians(lat1)
-    r_lon1 = radians(long1)
+#    r_lon1 = radians(long1)
 
     r_lat2 = radians(lat2)
-    r_lon2 = radians(long2)
+#    r_lon2 = radians(long2)
 
     d_lon = radians(long2 - long1)
 
     b = atan2(sin(d_lon)*cos(r_lat2),cos(r_lat1)*sin(r_lat2)-sin(r_lat1)*cos(r_lat2)*cos(d_lon)) # bearing calc
     bd = degrees(b)
-    br,bn = divmod(bd+360,360) # the bearing remainder and final bearing
+    br,bn = divmod(bd+360, 360) # the bearing remainder and final bearing
 
     return bn
+
 
 def calculate_heading_longpath(locator1, locator2):
     """calculates the heading from the first to the second locator (long path)
@@ -261,9 +261,10 @@ def calculate_heading_longpath(locator1, locator2):
 
     heading = calculate_heading(locator1, locator2)
 
-    lp = (heading + 180)%360
+    lp = (heading + 180) % 360
 
     return lp
+
 
 def calculate_sunrise_sunset(locator, calc_date=datetime.utcnow()):
     """calculates the next sunset and sunrise for a Maidenhead locator at a give date & time
@@ -355,4 +356,5 @@ def calculate_sunrise_sunset(locator, calc_date=datetime.utcnow()):
         result['evening_dawn'] = evening_dawn.replace(tzinfo=UTC)
     if sunset:
         result['sunset'] = sunset.replace(tzinfo=UTC)
+
     return result

@@ -109,11 +109,13 @@ class LookupLib(object):
         elif self._lookuptype == "clublogapi":
             pass
         elif self._lookuptype == "redis":
-            import redis
+            pass
+            #import redis
         elif self._lookuptype == "qrz":
             self._apikey = self._get_qrz_session_key(self._username, self._pwd)
         else:
             raise AttributeError("Lookup type missing")
+
 
     def _get_qrz_session_key(self, username, pwd):
 
@@ -215,6 +217,7 @@ class LookupLib(object):
 
         return True
 
+
     def _push_dict_to_redis(self, push_dict, redis_prefix, name):
         r = self._redis
         for i in push_dict:
@@ -223,6 +226,7 @@ class LookupLib(object):
             r.set(redis_prefix + name + str(i), json_data)
         return True
 
+
     def _push_dict_index_to_redis(self, index_dict, redis_prefix, name):
         r = self._redis
         for i in index_dict:
@@ -230,7 +234,6 @@ class LookupLib(object):
             for el in index_dict[i]:
                 r.sadd(redis_prefix + name + str(i), el)
         return True
-
 
 
     def lookup_entity(self, entity=None):
@@ -293,6 +296,7 @@ class LookupLib(object):
 
         # no matching case
         raise KeyError
+
 
     def _strip_metadata(self, my_dict):
         """
@@ -380,6 +384,7 @@ class LookupLib(object):
 
         raise KeyError("unknown Callsign")
 
+
     def _get_dicts_from_redis(self, name, index_name, redis_prefix, item):
         """
         Retrieve the data of an item from redis and put it in an index and data dictionary to match the
@@ -402,6 +407,7 @@ class LookupLib(object):
             return (data_dict, data_index_dict)
 
         raise KeyError ("No Data found in Redis for "+ item)
+
 
     def _check_data_for_date(self, item, timestamp, data_dict, data_index_dict):
         """
@@ -529,6 +535,7 @@ class LookupLib(object):
 
         # no matching case
         raise KeyError
+
 
     def is_invalid_operation(self, callsign, timestamp=datetime.utcnow().replace(tzinfo=UTC)):
         """
@@ -665,6 +672,7 @@ class LookupLib(object):
         #no matching case
         raise KeyError
 
+
     def _lookup_clublogAPI(self, callsign=None, timestamp=timestamp_now, url="https://secure.clublog.org/dxcc", apikey=None):
         """ Set up the Lookup object for Clublog Online API
         """
@@ -701,6 +709,7 @@ class LookupLib(object):
         else:
             return lookup
 
+
     def _request_callsign_info_from_qrz(self, callsign, apikey, apiv="1.3.3"):
         qrz_api_version = apiv
         url = "https://xmldata.qrz.com/xml/" + qrz_api_version + "/"
@@ -714,6 +723,7 @@ class LookupLib(object):
         response = requests.get(encodeurl, timeout=5)
         return response
 
+
     def _request_dxcc_info_from_qrz(self, dxcc_or_callsign, apikey, apiv="1.3.3"):
         qrz_api_version = apiv
         url = "https://xmldata.qrz.com/xml/" + qrz_api_version + "/"
@@ -726,6 +736,7 @@ class LookupLib(object):
         encodeurl = url + "?" + urllib.urlencode(params)
         response = requests.get(encodeurl, timeout=5)
         return response
+
 
     def _lookup_qrz_dxcc(self, dxcc_or_callsign, apikey, apiv="1.3.3"):
         """ Performs the dxcc lookup against the QRZ.com XML API:
@@ -888,7 +899,7 @@ class LookupLib(object):
         if root.callsign.imageinfo:
             lookup[const.IMAGE_INFO] = root.callsign.imageinfo.text
         if root.callsign.serial:
-            lookup[const.SERIAL] = long(root.callsign.serial.text)
+            lookup[const.SERIAL] = int(root.callsign.serial.text)
         if root.callsign.moddate:
             try:
                 lookup[const.MODDATE] = datetime.strptime(root.callsign.moddate.text, '%Y-%m-%d %H:%M:%S').replace(tzinfo=UTC)
@@ -955,7 +966,7 @@ class LookupLib(object):
         else:
             cty_file = self._lib_filename
 
-        header = self._extract_clublog_header(cty_file)
+#        header = self._extract_clublog_header(cty_file)
         cty_file = self._remove_clublog_xml_header(cty_file)
         cty_dict = self._parse_clublog_xml(cty_file)
 
@@ -971,6 +982,8 @@ class LookupLib(object):
         self._zone_exceptions_index = cty_dict["zone_exceptions_index"]
 
         return True
+
+
 
     def _load_countryfile(self,
                          url="http://www.country-files.com/cty/cty.plist",
@@ -1004,14 +1017,15 @@ class LookupLib(object):
 
         return True
 
+
     def _download_file(self, url, apikey=None):
         """ Download lookup files either from Clublog or Country-files.com
         """
         import gzip
         import tempfile
 
-        cty = {}
-        cty_date = ""
+#        cty = {}
+#        cty_date = ""
         cty_file_path = None
 
         filename = None
@@ -1062,6 +1076,7 @@ class LookupLib(object):
             cty_file_path = download_file_path
 
         return cty_file_path
+
 
     def _extract_clublog_header(self, cty_xml_filename):
         """
@@ -1128,6 +1143,7 @@ class LookupLib(object):
             self._logger.error("Error Message: " + str(e))
             return
 
+
     def _parse_clublog_xml(self, cty_xml_filename):
         """
         parse the content of a clublog XML file and return the
@@ -1147,7 +1163,7 @@ class LookupLib(object):
         zone_exceptions_index = {}
 
         cty_tree = ET.parse(cty_xml_filename)
-        root = cty_tree.getroot()
+#        root = cty_tree.getroot()
 
         #retrieve ADIF Country Entities
         cty_entities = cty_tree.find("entities")
@@ -1158,10 +1174,10 @@ class LookupLib(object):
                     entity = {}
                     for item in cty_entity:
                         if item.tag == "name":
-                            entity[const.COUNTRY] = unicode(item.text)
-                            self._logger.debug(unicode(item.text))
+                            entity[const.COUNTRY] = str(item.text)
+                            self._logger.debug(str(item.text))
                         elif item.tag == "prefix":
-                            entity[const.PREFIX] = unicode(item.text)
+                            entity[const.PREFIX] = str(item.text)
                         elif item.tag == "deleted":
                             if item.text == "TRUE":
                                 entity[const.DELETED] = True
@@ -1170,7 +1186,7 @@ class LookupLib(object):
                         elif item.tag == "cqz":
                             entity[const.CQZ] = int(item.text)
                         elif item.tag == "cont":
-                            entity[const.CONTINENT] = unicode(item.text)
+                            entity[const.CONTINENT] = str(item.text)
                         elif item.tag == "long":
                             entity[const.LONGITUDE] = float(item.text)*(-1)
                         elif item.tag == "lat":
@@ -1212,13 +1228,13 @@ class LookupLib(object):
                         else:
                             call_exceptions_index[call] = [int(cty_exception.attrib["record"])]
                     elif item.tag == "entity":
-                        call_exception[const.COUNTRY] = unicode(item.text)
+                        call_exception[const.COUNTRY] = str(item.text)
                     elif item.tag == "adif":
                         call_exception[const.ADIF] = int(item.text)
                     elif item.tag == "cqz":
                         call_exception[const.CQZ] = int(item.text)
                     elif item.tag == "cont":
-                        call_exception[const.CONTINENT] = unicode(item.text)
+                        call_exception[const.CONTINENT] = str(item.text)
                     elif item.tag == "long":
                         call_exception[const.LONGITUDE] = float(item.text)*(-1)
                     elif item.tag == "lat":
@@ -1243,7 +1259,7 @@ class LookupLib(object):
             for cty_prefix in cty_prefixes:
                 prefix = {}
                 for item in cty_prefix:
-                    pref = None
+#                    pref = None
                     if item.tag == "call":
 
                         #create index for this prefix
@@ -1253,13 +1269,13 @@ class LookupLib(object):
                         else:
                             prefixes_index[call] = [int(cty_prefix.attrib["record"])]
                     if item.tag == "entity":
-                        prefix[const.COUNTRY] = unicode(item.text)
+                        prefix[const.COUNTRY] = str(item.text)
                     elif item.tag == "adif":
                         prefix[const.ADIF] = int(item.text)
                     elif item.tag == "cqz":
                         prefix[const.CQZ] = int(item.text)
                     elif item.tag == "cont":
-                        prefix[const.CONTINENT] = unicode(item.text)
+                        prefix[const.CONTINENT] = str(item.text)
                     elif item.tag == "long":
                         prefix[const.LONGITUDE] = float(item.text)*(-1)
                     elif item.tag == "lat":
@@ -1345,6 +1361,7 @@ class LookupLib(object):
         }
         return result
 
+
     def _parse_country_file(self, cty_file, country_mapping_filename=None):
         """
         Parse the content of a PLIST file from country-files.com return the
@@ -1356,7 +1373,7 @@ class LookupLib(object):
         import plistlib
 
         cty_list = None
-        entities = {}
+#        entities = {}
         exceptions = {}
         prefixes = {}
 
@@ -1376,12 +1393,12 @@ class LookupLib(object):
         for item in cty_list:
             entry = {}
             call = str(item)
-            entry[const.COUNTRY] = unicode(cty_list[item]["Country"])
+            entry[const.COUNTRY] = str(cty_list[item]["Country"])
             if mapping:
                  entry[const.ADIF] = int(mapping[cty_list[item]["Country"]])
             entry[const.CQZ] = int(cty_list[item]["CQZone"])
             entry[const.ITUZ] = int(cty_list[item]["ITUZone"])
-            entry[const.CONTINENT] = unicode(cty_list[item]["Continent"])
+            entry[const.CONTINENT] = str(cty_list[item]["Continent"])
             entry[const.LATITUDE] = float(cty_list[item]["Latitude"])
             entry[const.LONGITUDE] = float(cty_list[item]["Longitude"])
 
@@ -1414,11 +1431,13 @@ class LookupLib(object):
 
         return result
 
+
     def _generate_random_word(self, length):
         """
             Generates a random word
         """
-        return ''.join(random.choice(string.lowercase) for i in xrange(length))
+        return ''.join(random.choice(string.lowercase) for i in range(length))
+
 
     def _check_html_response(self, response):
         """
@@ -1483,7 +1502,7 @@ class LookupLib(object):
             elif item == const.WHITELIST:
                 my_dict[item] = self._str_to_bool(my_dict[item])
             else:
-                my_dict[item] = unicode(my_dict[item])
+                my_dict[item] = str(my_dict[item])
 
         return my_dict
 

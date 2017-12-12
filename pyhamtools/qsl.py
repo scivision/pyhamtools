@@ -1,8 +1,6 @@
 from datetime import datetime
 import re
-
 import requests
-import redis
 from requests.exceptions import ConnectionError, HTTPError, Timeout
 
 def get_lotw_users(**kwargs):
@@ -25,29 +23,29 @@ def get_lotw_users(**kwargs):
            >>> mydict = get_lotw_users()
            >>> mydict['DH1TW']
            datetime.datetime(2014, 9, 7, 0, 0)
-                
+
     .. _ARRL: http://www.arrl.org/logbook-of-the-world
-    __ ARRL_ 
+    __ ARRL_
 
     """
-    
+
     url = ""
-    
+
     lotw = {}
-    
-    try: 
+
+    try:
         url = kwargs['url']
     except KeyError:
         # url = "http://wd5eae.org/LoTW_Data.txt"
         url = "https://lotw.arrl.org/lotw-user-activity.csv"
-    
-    try: 
+
+    try:
         result = requests.get(url)
     except (ConnectionError, HTTPError, Timeout) as e:
         raise IOError(e)
 
     error_count = 0
-    
+
     if result.status_code == requests.codes.ok:
         for el in result.text.split():
             data = el.split(",")
@@ -58,10 +56,11 @@ def get_lotw_users(**kwargs):
                 if error_count > 10:
                     raise ValueError("more than 10 wrongly formatted datasets " + str(e))
 
-    else: 
+    else:
         raise IOError("HTTP Error: " + str(result.status_code))
 
     return lotw
+
 
 def get_eqsl_users(**kwargs):
     """Download the latest official list of EQSL.cc users. The list of users can be found here_.
@@ -80,26 +79,26 @@ def get_eqsl_users(**kwargs):
 
            >>> from pyhamtools.qsl import get_eqsl_users
            >>> mylist = get_eqsl_users()
-           >>> try: 
+           >>> try:
            >>>    mylist.index('DH1TW')
            >>> except ValueError as e:
            >>>    print e
            'DH1TW' is not in list
-                
+
     .. _here: http://www.eqsl.cc/QSLCard/DownloadedFiles/AGMemberlist.txt
 
-    """    
-    
+    """
+
     url = ""
-    
+
     eqsl = []
-    
-    try: 
+
+    try:
         url = kwargs['url']
     except KeyError:
         url = "http://www.eqsl.cc/QSLCard/DownloadedFiles/AGMemberlist.txt"
-    
-    try: 
+
+    try:
         result = requests.get(url)
     except (ConnectionError, HTTPError, Timeout) as e:
         raise IOError(e)
@@ -107,7 +106,7 @@ def get_eqsl_users(**kwargs):
     if result.status_code == requests.codes.ok:
         eqsl = re.sub("^List.+UTC", "", result.text)
         eqsl = eqsl.upper().split()
-    else: 
+    else:
         raise IOError("HTTP Error: " + str(result.status_code))
 
     return eqsl
