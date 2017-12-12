@@ -1,9 +1,6 @@
-import pytest
+import pytest,unittest
 from datetime import datetime
-
-
 import pytz
-
 
 from pyhamtools.consts import LookupConventions as const
 from pyhamtools.dxcluster import decode_char_spot, decode_pc11_message, decode_pc61_message
@@ -38,7 +35,7 @@ response_spot1 = {
 }
 
 
-class TestDXClusterSpots:
+class TestDXClusterSpots(unittest.TestCase):
 
     def test_spots(self):
         assert decode_char_spot(fix_spot1)[const.SPOTTER] == "CT3FW"
@@ -67,3 +64,7 @@ class TestDXClusterSpots:
         assert decode_pc61_message(fix_spot_pc61)["node"] == "W4NJA"
         assert decode_pc61_message(fix_spot_pc61)["ip"] == "72.51.152.150"
         assert isinstance(decode_pc61_message(fix_spot_pc61)[const.TIME], datetime)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,6 +1,5 @@
 from datetime import datetime
-
-import pytest
+import pytest,unittest
 import pytz
 
 from pyhamtools.consts import LookupConventions as const
@@ -183,7 +182,7 @@ response_callsign_exceptions_7QAA_clublog = {
 
 
 
-class Test_callinfo_methods:
+class Test_callinfo_methods(unittest.TestCase):
 
     def test_callinfo_iterate_prefix(self, fix_callinfo):
         if fix_callinfo._lookuplib._lookuptype == "clublogxml":
@@ -355,3 +354,7 @@ class Test_callinfo_methods:
         assert fix_callinfo.get_continent("DH1TW") == 'EU'
         with pytest.raises(KeyError):
                 fix_callinfo.get_adif_id("QRM")
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -53,6 +53,7 @@ def latlong_to_locator (latitude, longitude):
 
     return locator
 
+
 def locator_to_latlong (locator):
     """converts Maidenhead locator in the corresponding WGS84 coordinates
 

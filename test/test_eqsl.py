@@ -1,6 +1,4 @@
-import os 
-import datetime
-
+import os
 import pytest
 
 from pyhamtools.qsl import get_eqsl_users

@@ -1,11 +1,11 @@
 import os
 import datetime
 
-import pytest
+import pytest,unittest
 
 from pyhamtools.qsl import get_lotw_users
 
-class Test_lotw_methods:
+class Test_lotw_methods(unittest.TestCase):
 
     def test_check_content_with_mocked_http_server(self, httpserver):
         httpserver.serve_content(open('./fixtures/lotw-user-activity.csv').read())
@@ -33,3 +33,5 @@ class Test_lotw_methods:
             get_lotw_users(url=httpserver.url)
 
 
+if __name__ == '__main__':
+    unittest.main()
